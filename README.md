@@ -15,10 +15,10 @@ Story telling wbsite is a web application built using Flask and OpenAI's GPT-4 m
 - Openai key
 
 ## Setup
-1. Open the main application file (e.g., app.py) and locate the following line:
+1. Open the main app.py and locate the following line:
 
 ```python
 openai.api_key = 'Your API key here'
-#Replace the placeholder API key with your actual OpenAI API key.
+# Replace the placeholder API key with your actual OpenAI API key.
 
 
