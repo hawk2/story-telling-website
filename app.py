@@ -52,6 +52,6 @@ def story():
     return render_template('story.html', story=story)
 
 if __name__ == "__main__":
-    openai.api_key = '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'
+    openai.api_key = 'Your API key here'
     app.run(debug=True)
 
