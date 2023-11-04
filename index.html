@@ -2,17 +2,85 @@
 <html>
 <head>
     <title>StoryGPT</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <form action="/story.html" method="post">
+
+<div id="formDiv">
+    <form id="storyForm">
         <label for="name">What is your name?</label>
         <input type="text" name="name" required><br>
+
         <label for="hobbies">What do you like to do?</label>
         <input type="text" name="hobbies" required><br>
+
         <label for="friends">What are/is the names of your friend(s)?</label>
         <input type="text" name="friends" required><br>
+
+        <label for="storyAbout">What do you want the story to be about?</label>
+        <input type="text" name="storyAbout" required><br>
+
+        <label for="ageRange">Select an age range:</label>
+        <select name="ageRange">
+            <option value="1-10">1-10</option>
+            <option value="10-21">11-21</option>
+            <option value="21-30">21-30</option>
+            <option value="31-50">31-50</option>
+            <option value="50+">50+</option>
+        </select><br>
+
         <input type="submit" value="Submit">
     </form>
+</div>
+
+<div id="loadingMessage" style="display:none; text-align: center;">
+    <p>Generating... This will take 10 - 30 seconds.</p>
+</div>
+
+<div id="storyDiv" style="display:none;">
+    <h1>Your Story:</h1>
+    <p id="story"></p>
+    <h2>Generated Image:</h2>
+    <img id="storyImage" alt="Generated Image">
+    <p>Prompt used for DALL·E: <span id="iprompt"></span></p>
+</div>
+
+  <script>
+  $("#storyForm").submit(function(event) {
+      event.preventDefault();
+
+      // Show the generating message when form is submitted
+      $("#loadingMessage").show();
+      $("#storyForm").hide(); // Optionally, hide the form to prevent multiple submissions
+
+      $.ajax({
+          url: '/story',
+          type: 'post',
+          data: $(this).serialize(),
+          dataType: 'json',
+          success: function(data) {
+              $("#formDiv").hide();
+
+              // Set the content based on the returned JSON data
+              for (let key in data) {
+                  if (key === "image_url") {
+                      $("#storyImage").attr("src", data[key]);
+                  } else {
+                      $("#" + key).text(data[key]);
+                  }
+              }
+              $("#storyDiv").show();
+          },
+          error: function(error) {
+              console.error("Error occurred:", error);
+              $("#loadingMessage").hide();
+              $("#formDiv").show();
+          }
+      });
+  });
+  </script>
+
+
 </body>
 </html>
-
